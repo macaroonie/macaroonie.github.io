@@ -47,7 +47,7 @@ for (let i = 0; i < numBoards; i++) {
   wordleArr.push(allowed_words[Math.floor(Math.random() * allowed_words.length)].toUpperCase());
   createBoard(boardArr[i], i);
 }
-console.log(wordleArr)
+// console.log(wordleArr)
 // isGameOverList.push(false);
 // isGameOverList.push(false);
 // wordleList.push("OOMPH")
@@ -67,7 +67,7 @@ function createBoardContainer(index) {
     const boardContainer = document.createElement("div");
     boardContainer.setAttribute("id", `board-container-${index}`);
     boardContainer.setAttribute("class", `board-container`);
-    boardContainer.setAttribute("onclick", `getKeyboardStateOfBoard(${index})`)
+    boardContainer.setAttribute("onclick", `getKeyboardStateByBoard(${index})`)
     boardsDisplayContainer.append(boardContainer);
 }
 
@@ -104,7 +104,7 @@ function handleInput(key) {
     return;
   }
 
-  console.log("clicked", key);
+  // console.log("clicked", key);
   if (key === "DEL") {
     console.log("delete letter");
     deleteLetter();
@@ -113,15 +113,15 @@ function handleInput(key) {
   }
 
   if (key === "ENTER") {
-    console.log("check guess");
+    // console.log("check guess");
     checkGuess();
     // getKeyboardStateOfBoard(currentIndex);
-    console.log("guessRows", guessRows);
+    // console.log("guessRows", guessRows);
     return;
   }
 
   addLetter(key);
-  console.log("guessRows", guessRows);
+  // console.log("guessRows", guessRows);
 }
 
 // same for each display
@@ -142,7 +142,7 @@ function addLetter(key) {
     }
   });
   currentTile++;
-  console.log(currentTile);
+  // console.log(currentTile);
 }
 
 // same for each display
@@ -182,7 +182,7 @@ function checkGuess() {
       }
       flipTile();
       // if any displays are correct, no longer accept input on that display
-      console.log(`guess is ${guess}, wordle is ${wordleArr}`);
+      // console.log(`guess is ${guess}, wordle is ${wordleArr}`);
       wordleArr.forEach((wordle, index) => {
         if (guess == wordle) {
           boardIsCompletedArr[index] = true;
