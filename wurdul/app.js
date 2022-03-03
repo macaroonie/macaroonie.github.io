@@ -313,7 +313,7 @@ function getKeyboardStateByBoard(index) {
 
 function getBoardNumByInput() {
   let input = Number(document.getElementById("input").value);
-  if (!input) {
+  if (!input || !Number.isInteger(input) || input < 1) {
     alert("Please enter a valid number.")
   } else {
     sessionStorage.setItem("storedNumBoards", input);
