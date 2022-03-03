@@ -1,6 +1,6 @@
 // TODO: make customizable colors
 // TODO: make customizable number of displays
-numBoards = 4;
+numBoards = 1;
 const flipTime = 300;
 const keyboard = document.querySelector(".key-container");
 const messageDisplay = document.querySelector(".message-container");
@@ -47,11 +47,7 @@ for (let i = 0; i < numBoards; i++) {
   wordleArr.push(allowed_words[Math.floor(Math.random() * allowed_words.length)].toUpperCase());
   createBoard(boardArr[i], i);
 }
-// console.log(wordleArr)
-// isGameOverList.push(false);
-// isGameOverList.push(false);
-// wordleList.push("OOMPH")
-// wordleList.push("FARTS")
+wordleArr[0] = 'SUSHI'
 
 // creates key display - only one needed
 keys.forEach((key) => {
@@ -104,24 +100,17 @@ function handleInput(key) {
     return;
   }
 
-  // console.log("clicked", key);
   if (key === "DEL") {
-    console.log("delete letter");
     deleteLetter();
-    console.log("guessRows", guessRows);
     return;
   }
 
   if (key === "ENTER") {
-    // console.log("check guess");
     checkGuess();
-    // getKeyboardStateOfBoard(currentIndex);
-    // console.log("guessRows", guessRows);
     return;
   }
 
   addLetter(key);
-  // console.log("guessRows", guessRows);
 }
 
 // same for each display
@@ -142,7 +131,6 @@ function addLetter(key) {
     }
   });
   currentTile++;
-  // console.log(currentTile);
 }
 
 // same for each display
@@ -182,7 +170,6 @@ function checkGuess() {
       }
       flipTile();
       // if any displays are correct, no longer accept input on that display
-      // console.log(`guess is ${guess}, wordle is ${wordleArr}`);
       wordleArr.forEach((wordle, index) => {
         if (guess == wordle) {
           boardIsCompletedArr[index] = true;
@@ -244,6 +231,7 @@ function flipTile() {
     }
     rowTiles = row.childNodes;
     wordle = wordleArr[index];
+    checkWordle = wordle;
     // THIS PART IS ALl UNIQUE UP TO...
     const guessArr = [];
 
@@ -257,9 +245,13 @@ function flipTile() {
     guessArr.forEach((guess, index) => {
       if (guess.letter == wordle[index]) {
         guess.color = "green-overlay";
+        checkWordle = checkWordle.replace(guess.letter, '')
       }
-      if (wordle.includes(guess.letter) && guess.color != "green-overlay") {
+    });
+    guessArr.forEach((guess) => {
+      if (checkWordle.includes(guess.letter) && guess.color != "green-overlay") {
         guess.color = "yellow-overlay";
+        checkWordle = checkWordle.replace(guess.letter, '')
       }
     });
 
