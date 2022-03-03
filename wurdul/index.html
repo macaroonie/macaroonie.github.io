@@ -17,6 +17,21 @@
       <div class="answer-container"></div>
       <div class="key-container"></div>
     </div>
+    <div id="input-bar" style="display: none">
+      <div class="tb">
+        <div class="td">
+          <input id="input" type="text" placeholder="Number of Boards" required/>
+        </div>
+        <div class="td" id="arrow">
+          <button onclick="getBoardNumByInput()">
+            <div id="arrow-tail"></div>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button id="settings" onclick="toggleInputBar()">&#9881</button>
+    <div id="overlay-bg" style="display: none"></div>
     <script src="config.js"></script>
     <script src="app.js"></script>
   </body>

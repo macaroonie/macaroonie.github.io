@@ -1,13 +1,14 @@
-// TODO: make customizable colors
-// TODO: make customizable number of displays
-numBoards = 1;
+let storedNumBoards = Number(sessionStorage.getItem("storedNumBoards"));
+let numBoards = (storedNumBoards) ? storedNumBoards : 1;
 const flipTime = 300;
 const keyboard = document.querySelector(".key-container");
 const messageDisplay = document.querySelector(".message-container");
+const gameContainer = document.querySelector(".game-container")
+const inputBar = document.getElementById("input-bar")
+const overlay_bg = document.getElementById("overlay-bg")
+
 let isGameOver = false;
 let currentIndex = 0;
-
-
 // keep track of guesses 
 const guessRows = [];
 const numGuessRows = 5 + numBoards;
@@ -26,6 +27,9 @@ for (let i = 0; i < numBoards; i++) {
 
 document.addEventListener("keydown", (event) => {
   let key;
+  if (event.key == 'Escape' && inputBar.style.display === "block") {
+    hideInputBar();
+  }
   if (event.code === "Space") {
     key = "__";
     event.preventDefault()
@@ -90,13 +94,13 @@ function createBoard(board, boardIndex) {
   });
 }
 
-// uses checkRow, addLetter, deleteLetter
+// uses checkGuess, addLetter, deleteLetter
 function handleInput(key) {
   if (key == "BACKSPACE") {
     key = "DEL";
   }
 
-  if (isGameOver || !keys.includes(key)) {
+  if (isGameOver || !keys.includes(key) || (inputBar.style.display == "block" && key != "ENTER")) {
     return;
   }
 
@@ -106,7 +110,11 @@ function handleInput(key) {
   }
 
   if (key === "ENTER") {
-    checkGuess();
+    if (inputBar.style.display == "block") {
+      getBoardNumByInput()
+    } else {
+      checkGuess();
+    }
     return;
   }
 
@@ -232,7 +240,6 @@ function flipTile() {
     rowTiles = row.childNodes;
     wordle = wordleArr[index];
     checkWordle = wordle;
-    // THIS PART IS ALl UNIQUE UP TO...
     const guessArr = [];
 
     rowTiles.forEach((tile) => {
@@ -260,7 +267,6 @@ function flipTile() {
         tile.classList.add("flip");
         tile.classList.add(guessArr[index].color);
       }, flipTime * index);
-      // ... UP TO HERE, then this colors the same keyboard (and so doesn't work rn D: )
         setTimeout(() => {
             addColorToKey(guessArr[index].letter, guessArr[index].color);
           }, flipTime * 5);
@@ -303,6 +309,44 @@ function getKeyboardStateByBoard(index) {
         });
     }
     currentIndex = index;
+}
+
+function getBoardNumByInput() {
+  let input = Number(document.getElementById("input").value);
+  if (!input) {
+    alert("Please enter a valid number.")
+  } else {
+    sessionStorage.setItem("storedNumBoards", input);
+    window.location.reload();
+  }
+}
+
+overlay_bg.addEventListener("click", ()=> {
+  document.body.style.overflow = "auto";
+  inputBar.style.display = "none"
+  gameContainer.style.filter = "none";
+  overlay_bg.style.display = "none"
+})
+
+function toggleInputBar() {
+    if (inputBar.style.display === "none") {
+      showInputBar();
+    } else {
+      hideInputBar();
+    }
+}
+
+function hideInputBar() {
+  document.body.style.overflow = "auto";
+  inputBar.style.display = "none"
+  overlay_bg.style.display = "none"
+  gameContainer.style.filter = "none";
+}
+function showInputBar() {
+  document.body.style.overflow = "hidden";
+  inputBar.style.display = "block";
+  overlay_bg.style.display = "block";
+  gameContainer.style.filter = "blur(15px)";
 }
 
 
