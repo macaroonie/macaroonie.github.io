@@ -1,15 +1,15 @@
 let storedNumBoards = Number(sessionStorage.getItem("storedNumBoards"));
-let numBoards = (storedNumBoards) ? storedNumBoards : 1;
+let numBoards = storedNumBoards ? storedNumBoards : 1;
 const flipTime = 300;
 const keyboard = document.querySelector(".key-container");
 const messageDisplay = document.querySelector(".message-container");
-const gameContainer = document.querySelector(".game-container")
-const inputBar = document.getElementById("input-bar")
-const overlay_bg = document.getElementById("overlay-bg")
+const gameContainer = document.querySelector(".game-container");
+const inputBar = document.getElementById("input-bar");
+const overlay_bg = document.getElementById("overlay-bg");
 
 let isGameOver = false;
 let currentIndex = 0;
-// keep track of guesses 
+// keep track of guesses
 const guessRows = [];
 const numGuessRows = 5 + numBoards;
 for (let i = 0; i < numGuessRows; i++) {
@@ -21,18 +21,18 @@ let currentRow = 0;
 let currentTile = 0;
 const boardArr = [];
 for (let i = 0; i < numBoards; i++) {
-    createBoardContainer(i)
-    boardArr.push(document.querySelector(`#board-container-${i}`));
+  createBoardContainer(i);
+  boardArr.push(document.querySelector(`#board-container-${i}`));
 }
 
 document.addEventListener("keydown", (event) => {
   let key;
-  if (event.key == 'Escape' && inputBar.style.display === "block") {
+  if (event.key == "Escape" && inputBar.style.display === "block") {
     hideInputBar();
   }
   if (event.code === "Space") {
     key = "__";
-    event.preventDefault()
+    event.preventDefault();
   } else {
     key = event.key.toUpperCase();
   }
@@ -40,7 +40,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 // this is good code :')
-let allowed_words = WORD_BANK.split(" ")
+let allowed_words = WORD_BANK.split(" ");
 
 // declare + initialize list of random words to guess and their respective completion trackers
 const wordleArr = [];
@@ -48,27 +48,49 @@ const boardIsCompletedArr = [];
 // create empty board for each board
 for (let i = 0; i < numBoards; i++) {
   boardIsCompletedArr.push(false);
-  wordleArr.push(allowed_words[Math.floor(Math.random() * allowed_words.length)].toUpperCase());
+  wordleArr.push(
+    allowed_words[
+      Math.floor(Math.random() * allowed_words.length)
+    ].toUpperCase()
+  );
   createBoard(boardArr[i], i);
 }
-wordleArr[0] = 'SUSHI'
+wordleArr[0] = "SUSHI";
 
 // creates key display - only one needed
-keys.forEach((key) => {
+keyRows = document.getElementsByClassName('key-row');
+rowSpacerStart = document.createElement("div");
+rowSpacerEnd = document.createElement("div");
+rowSpacerStart.setAttribute("class", `row-spacer`);
+rowSpacerEnd.setAttribute("class", `row-spacer`);
+rowSpacerEnd.setAttribute("id", `row-spacer-end`);
+keyRows[1].append(rowSpacerStart);
+keyRows[1].append(rowSpacerEnd);
+rowSpacerEnd = document.getElementById('row-spacer-end');
+keys.forEach((key, index) => {
   const buttonElement = document.createElement("button");
   buttonElement.textContent = key;
   buttonElement.setAttribute("id", key);
   buttonElement.addEventListener("click", () => handleInput(key));
-  keyboard.append(buttonElement);
+  if (index <= 9) {
+    keyRows[0].append(buttonElement)
+  } else if (index <= 18) {
+    keyRows[1].insertBefore(buttonElement, rowSpacerEnd)
+    // keyRows[1].append(buttonElement)
+  } else if (index <= 27) {
+    keyRows[2].append(buttonElement)
+  } else {
+    keyRows[3].append(buttonElement)
+  }
 });
 
 function createBoardContainer(index) {
-    boardsDisplayContainer = document.querySelector(".boards-display-container");
-    const boardContainer = document.createElement("div");
-    boardContainer.setAttribute("id", `board-container-${index}`);
-    boardContainer.setAttribute("class", `board-container`);
-    boardContainer.setAttribute("onclick", `getKeyboardStateByBoard(${index})`)
-    boardsDisplayContainer.append(boardContainer);
+  boardsDisplayContainer = document.querySelector(".boards-display-container");
+  const boardContainer = document.createElement("div");
+  boardContainer.setAttribute("id", `board-container-${index}`);
+  boardContainer.setAttribute("class", `board-container`);
+  boardContainer.setAttribute("onclick", `getKeyboardStateByBoard(${index})`);
+  boardsDisplayContainer.append(boardContainer);
 }
 
 // creates tile display - unique to each display
@@ -100,7 +122,11 @@ function handleInput(key) {
     key = "DEL";
   }
 
-  if (isGameOver || !keys.includes(key) || (inputBar.style.display == "block" && key != "ENTER")) {
+  if (
+    isGameOver ||
+    !keys.includes(key) ||
+    (inputBar.style.display == "block" && key != "ENTER")
+  ) {
     return;
   }
 
@@ -111,7 +137,7 @@ function handleInput(key) {
 
   if (key === "ENTER") {
     if (inputBar.style.display == "block") {
-      getBoardNumByInput()
+      getBoardNumByInput();
     } else {
       checkGuess();
     }
@@ -147,13 +173,15 @@ function deleteLetter() {
     return;
   }
   currentTile--;
-  const tiles = document.getElementsByName(`guessRow-${currentRow}-tile-${currentTile}`);
+  const tiles = document.getElementsByName(
+    `guessRow-${currentRow}-tile-${currentTile}`
+  );
   tiles.forEach((tile, index) => {
     if (!boardIsCompletedArr[index]) {
       tile.textContent = "";
       guessRows[currentRow][currentTile] = "";
       tile.setAttribute("data", "");
-      tile.classList.remove("pop")
+      tile.classList.remove("pop");
       tile.classList.remove("grey-border");
     }
   });
@@ -182,11 +210,11 @@ function checkGuess() {
         if (guess == wordle) {
           boardIsCompletedArr[index] = true;
           let jingle = new Audio("kurtingle.mp3");
-          jingle.play()
+          jingle.play();
         }
       });
       if (boardIsCompletedArr.every((x) => x)) {
-        showMessage("Amazing!", duration=5000);
+        showMessage("Amazing!", (duration = 5000));
         let audio = new Audio("NYT.mp3"); // should probably declare up top
         audio.play();
         isGameOver = true;
@@ -195,8 +223,9 @@ function checkGuess() {
         if (currentRow >= 5 + numBoards - 1) {
           isGameOver = true;
           showMessage(
-            `Game over. You lose. The words were: ${wordleArr.join(" ")}`
-          , duration=5000);
+            `Game over. You lose. The words were: ${wordleArr.join(" ")}`,
+            (duration = 5000)
+          );
           return;
         }
         if (currentRow < 5 + numBoards) {
@@ -211,7 +240,7 @@ function checkGuess() {
 }
 
 // only one needed
-function showMessage(message, duration=2000) {
+function showMessage(message, duration = 2000) {
   const messageElement = document.createElement("p");
   messageElement.textContent = message;
   messageDisplay.append(messageElement);
@@ -220,13 +249,13 @@ function showMessage(message, duration=2000) {
 
 // same for all displays for now
 function addColorToKey(keyLetter, color) {
-    const key = document.getElementById(keyLetter);
-    key.classList.add(color);
+  const key = document.getElementById(keyLetter);
+  key.classList.add(color);
 }
 
 function removeColorFromKey(keyLetter, color) {
-    const key = document.getElementById(keyLetter);
-    key.classList.remove(color)
+  const key = document.getElementById(keyLetter);
+  key.classList.remove(color);
 }
 // unique to each display
 // for the current row on each board, flip the proper tiles
@@ -252,13 +281,16 @@ function flipTile() {
     guessArr.forEach((guess, index) => {
       if (guess.letter == wordle[index]) {
         guess.color = "green-overlay";
-        checkWordle = checkWordle.replace(guess.letter, '')
+        checkWordle = checkWordle.replace(guess.letter, "");
       }
     });
     guessArr.forEach((guess) => {
-      if (checkWordle.includes(guess.letter) && guess.color != "green-overlay") {
+      if (
+        checkWordle.includes(guess.letter) &&
+        guess.color != "green-overlay"
+      ) {
         guess.color = "yellow-overlay";
-        checkWordle = checkWordle.replace(guess.letter, '')
+        checkWordle = checkWordle.replace(guess.letter, "");
       }
     });
 
@@ -267,79 +299,78 @@ function flipTile() {
         tile.classList.add("flip");
         tile.classList.add(guessArr[index].color);
       }, flipTime * index);
-        setTimeout(() => {
-            addColorToKey(guessArr[index].letter, guessArr[index].color);
-          }, flipTime * 5);
+      setTimeout(() => {
+        addColorToKey(guessArr[index].letter, guessArr[index].color);
+      }, flipTime * 5);
     });
   });
 }
 
 function getKeyboardStateByBoard(index) {
-    keyboard.classList.add('pop')
-    setTimeout(() => {
-        keyboard.classList.remove('pop')
-      }, 100);
-    // keyboard.classList.remove('pop')
-    wordle = wordleArr[index];
-    let color;
+  keyboard.classList.add("pop");
+  setTimeout(() => {
+    keyboard.classList.remove("pop");
+  }, 100);
+  // keyboard.classList.remove('pop')
+  wordle = wordleArr[index];
+  let color;
 
-    // remove colors from all letters
-    for (let i = 0; i < currentRow; i++) {
-        guessRow = guessRows[i];
-        guessRow.forEach(letter => {
-            removeColorFromKey(letter, 'grey-overlay')
-            removeColorFromKey(letter, 'yellow-overlay')
-            removeColorFromKey(letter, 'green-overlay')
-        })
-    }
+  // remove colors from all letters
+  for (let i = 0; i < currentRow; i++) {
+    guessRow = guessRows[i];
+    guessRow.forEach((letter) => {
+      removeColorFromKey(letter, "grey-overlay");
+      removeColorFromKey(letter, "yellow-overlay");
+      removeColorFromKey(letter, "green-overlay");
+    });
+  }
 
-
-    // check all rows with wordle
-    for (let i = 0; i < currentRow; i++) {
-        guessRow = guessRows[i];
-        guessRow.forEach((letter, index) => {
-            if (letter == wordle[index]) {
-                color = "green-overlay";
-            } else if (wordle.includes(letter) && color != "green-overlay") {
-                color = "yellow-overlay";
-            } else {
-                color = "grey-overlay";
-            }
-            addColorToKey(letter, color);
-        });
-    }
-    currentIndex = index;
+  // check all rows with wordle
+  for (let i = 0; i < currentRow; i++) {
+    guessRow = guessRows[i];
+    guessRow.forEach((letter, index) => {
+      if (letter == wordle[index]) {
+        color = "green-overlay";
+      } else if (wordle.includes(letter) && color != "green-overlay") {
+        color = "yellow-overlay";
+      } else {
+        color = "grey-overlay";
+      }
+      addColorToKey(letter, color);
+    });
+  }
+  currentIndex = index;
 }
 
 function getBoardNumByInput() {
   let input = Number(document.getElementById("input").value);
   if (!input || !Number.isInteger(input) || input < 1) {
-    alert("Please enter a valid number.")
+    alert("Please enter a valid number.");
   } else {
     sessionStorage.setItem("storedNumBoards", input);
     window.location.reload();
   }
 }
 
-overlay_bg.addEventListener("click", ()=> {
+overlay_bg.addEventListener("click", () => {
   document.body.style.overflow = "auto";
-  inputBar.style.display = "none"
+  inputBar.style.display = "none";
   gameContainer.style.filter = "none";
-  overlay_bg.style.display = "none"
-})
+  overlay_bg.style.display = "none";
+});
 
 function toggleInputBar() {
-    if (inputBar.style.display === "none") {
-      showInputBar();
-    } else {
-      hideInputBar();
-    }
+  if (inputBar.style.display === "none") {
+    showInputBar();
+  } else {
+    hideInputBar();
+  }
 }
 
 function hideInputBar() {
   document.body.style.overflow = "auto";
-  inputBar.style.display = "none"
-  overlay_bg.style.display = "none"
+  inputBar.style.display = "none";
+  overlay_bg.style.display = "none";
   gameContainer.style.filter = "none";
 }
 function showInputBar() {
@@ -348,6 +379,3 @@ function showInputBar() {
   overlay_bg.style.display = "block";
   gameContainer.style.filter = "blur(15px)";
 }
-
-
-
