@@ -14,12 +14,11 @@ body {
 }
 
 .game-container {
-  height: 90vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding-bottom: 100px;
   width: 100%;
 }
 
@@ -43,7 +42,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  padding-bottom: 200px;
+  padding-bottom: 125px;
 }
 
 .board-container {
@@ -83,7 +82,7 @@ body {
 }
 
 .key-container {
-  bottom: 50px;
+  bottom: 10px;
   position: fixed;
   width: 100%;
   max-width: var(--game-max-width);
@@ -106,6 +105,7 @@ body {
   margin: 2.5px;
   font-size: 14px;
   font-weight: bold;
+  padding: 0px;
 }
 
 .row-spacer {
@@ -185,19 +185,7 @@ p {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes keyboard-pop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
   100% {
     transform: scale(1);
@@ -275,10 +263,6 @@ input[type="text"]::placeholder {
 #input-bar input:focus {
   outline: none;
 }
-#settings:focus {
-  outline: none !important;
-  box-shadow: none;
-}
 
 #arrow {
   width: 1px;
@@ -335,22 +319,32 @@ input[type="text"]::placeholder {
   transform: rotateZ(-52deg);
 }
 
+.icon::before {
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
 #settings {
-  height: 50px;
-  width: 50px;
-  position: absolute;
-  top: 0.5%;
-  right: 2%;
-  font-size: 40px;
-  line-height: 0px;
+  font-size: 0px;
+  color: white;
   float: right;
-  background-color: transparent;
-  border: none;
+  position: absolute;
+  top: 2%;
+  right: 2%;
   z-index: 1000;
+  padding: 0;
+  border: none;
+  background-color: transparent;
 }
 
 #settings:hover {
   cursor: pointer;
+}
+
+#settings:focus {
+  outline: none !important;
+  box-shadow: none;
 }
 
 #overlay-bg {

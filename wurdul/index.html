@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>WURDUL</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -26,7 +29,12 @@
     <div id="input-bar" style="display: none">
       <div class="tb">
         <div class="td">
-          <input id="input" type="text" placeholder="Number of Boards" required/>
+          <input
+            id="input"
+            type="text"
+            placeholder="Number of Boards"
+            required
+          />
         </div>
         <div class="td" id="arrow">
           <button onclick="getBoardNumByInput()">
@@ -36,7 +44,13 @@
         </div>
       </div>
     </div>
-    <button id="settings" onclick="toggleInputBar()">&#9881</button>
+    <button id="settings" onclick="toggleInputBar()">
+      <i class="fa-solid fa-gear"></i>
+    </button>
+    <script
+      src="https://kit.fontawesome.com/dbae18be44.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="config.js"></script>
     <script src="app.js"></script>
   </body>
