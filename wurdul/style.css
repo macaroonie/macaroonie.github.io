@@ -17,6 +17,10 @@ button {
   touch-action: manipulation;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .game-container {
   height: 100vh;
   display: flex;
@@ -70,7 +74,7 @@ button {
 }
 
 .board-container:active {
-  background-color: #60606318;
+  background-color: #48484b18;
 }
 
 .board-container .tile {
@@ -124,6 +128,7 @@ button {
 #key-row-3 button {
   flex: none;
 }
+
 #key-row-3 button:nth-child(1) {
   width: 60%;
 }
@@ -230,14 +235,12 @@ green > yellow > grey*/
 
 #input-bar {
   display: block;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50%;
-  /* max-width: 500px; */
   padding-left: 0.5em;
-  /* padding-right: 0.125em; */
   background-color: #525252;
   border-radius: 12px;
   z-index: 1000;
@@ -340,10 +343,6 @@ input[type="text"]::placeholder {
   padding: 0;
   border: none;
   background-color: transparent;
-}
-
-#settings:hover {
-  cursor: pointer;
 }
 
 #settings:focus {
