@@ -1,14 +1,15 @@
 let storedNumBoards = Number(sessionStorage.getItem("storedNumBoards"));
-let numBoards = storedNumBoards ? storedNumBoards : 1;
-const flipTime = 300;
+const numBoards = storedNumBoards ? storedNumBoards : 1;
+let isGameOver = false;
+let currentIndex = 0;
+const flipTime = 300; // ms
 const keyboard = document.querySelector(".key-container");
 const messageDisplay = document.querySelector(".message-container");
 const gameContainer = document.querySelector(".game-container");
 const inputBar = document.getElementById("input-bar");
 const overlay_bg = document.getElementById("overlay-bg");
 
-let isGameOver = false;
-let currentIndex = 0;
+// TODO: Keep track of boards remaining and guesses remaining
 // keep track of guesses
 const guessRows = [];
 const numGuessRows = 5 + numBoards;
@@ -25,24 +26,8 @@ for (let i = 0; i < numBoards; i++) {
   boardArr.push(document.querySelector(`#board-container-${i}`));
 }
 
-document.addEventListener("keydown", (event) => {
-  let key;
-  if (event.key == "Escape" && inputBar.style.display === "block") {
-    hideInputBar();
-  }
-  if (event.code === "Space") {
-    key = "__";
-    event.preventDefault();
-  } else {
-    key = event.key.toUpperCase();
-  }
-  handleInput(key);
-});
-
-// this is good code :')
-let allowed_words = WORD_BANK.split(" ");
-
 // declare + initialize list of random words to guess and their respective completion trackers
+let allowed_words = WORD_BANK.split(" ");
 const wordleArr = [];
 const boardIsCompletedArr = [];
 // create empty board for each board
@@ -55,7 +40,6 @@ for (let i = 0; i < numBoards; i++) {
   );
   createBoard(boardArr[i], i);
 }
-wordleArr[0] = "SUSHI";
 
 // creates key display - only one needed
 keyRows = document.getElementsByClassName('key-row');
@@ -76,12 +60,35 @@ keys.forEach((key, index) => {
     keyRows[0].append(buttonElement)
   } else if (index <= 18) {
     keyRows[1].insertBefore(buttonElement, rowSpacerEnd)
-    // keyRows[1].append(buttonElement)
   } else if (index <= 27) {
     keyRows[2].append(buttonElement)
   } else {
     keyRows[3].append(buttonElement)
   }
+});
+
+document.addEventListener("keydown", (event) => {
+  let key;
+  if (event.key == "Escape") {
+    if (inputBar.style.display === "block") {
+      hideInputBar();
+    } else if (inputBar.style.display === "none") {
+      showInputBar();
+    }
+  }
+  
+  if (event.code === "Space") {
+    key = "__";
+    event.preventDefault();
+  } else {
+    key = event.key.toUpperCase();
+  }
+  handleInput(key);
+});
+
+
+overlay_bg.addEventListener("click", () => {
+  hideInputBar();
 });
 
 function createBoardContainer(index) {
@@ -257,6 +264,7 @@ function removeColorFromKey(keyLetter, color) {
   const key = document.getElementById(keyLetter);
   key.classList.remove(color);
 }
+
 // unique to each display
 // for the current row on each board, flip the proper tiles
 function flipTile() {
@@ -311,7 +319,6 @@ function getKeyboardStateByBoard(index) {
   setTimeout(() => {
     keyboard.classList.remove("pop");
   }, 100);
-  // keyboard.classList.remove('pop')
   wordle = wordleArr[index];
   let color;
 
@@ -351,13 +358,6 @@ function getBoardNumByInput() {
     window.location.reload();
   }
 }
-
-overlay_bg.addEventListener("click", () => {
-  document.body.style.overflow = "auto";
-  inputBar.style.display = "none";
-  gameContainer.style.filter = "none";
-  overlay_bg.style.display = "none";
-});
 
 function toggleInputBar() {
   if (inputBar.style.display === "none") {
